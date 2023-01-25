@@ -104,7 +104,7 @@ end)
 --Event for ALL PLAYER
 RegisterNetEvent("mb-GetRichPlayer:server:getAllPlayerMoney", function(type)
     if (type == "full") then
-        local topRichestPlayers = MySQL.Sync.fetchAll("SELECT `name`, `money`, `citizenid`, `license`, JSON_VALUE(money, '$.cash') + JSON_VALUE(money, '$.bank') AS `total_money` FROM `players` GROUP BY `name` ORDER BY `total_money` DESC")
+        local topRichestPlayers = MySQL.Sync.fetchAll("SELECT `name`, `money`, `citizenid`, `license`, JSON_VALUE(money, '$.cash') + JSON_VALUE(money, '$.bank') AS `total_money` FROM `players` GROUP BY `citizenid` ORDER BY `total_money` DESC")
         local resultWithLicense = ''
 
         for _, v in pairs(topRichestPlayers) do
@@ -113,7 +113,7 @@ RegisterNetEvent("mb-GetRichPlayer:server:getAllPlayerMoney", function(type)
 
         sendToDiscord(resultWithLicense) --Send log to discord
     elseif (type == "standard") then
-        local topRichestPlayers = MySQL.Sync.fetchAll("SELECT `name`, `money`, `citizenid`, JSON_VALUE(money, '$.cash') + JSON_VALUE(money, '$.bank') AS `total_money` FROM `players` GROUP BY `name` ORDER BY `total_money` DESC")
+        local topRichestPlayers = MySQL.Sync.fetchAll("SELECT `name`, `money`, `citizenid`, JSON_VALUE(money, '$.cash') + JSON_VALUE(money, '$.bank') AS `total_money` FROM `players` GROUP BY `citizenid` ORDER BY `total_money` DESC")
         local resultWithoutLicense = ''
 
         for _, v in pairs(topRichestPlayers) do
@@ -122,7 +122,7 @@ RegisterNetEvent("mb-GetRichPlayer:server:getAllPlayerMoney", function(type)
 
         sendToDiscord(resultWithoutLicense) --Send log to discord
     else
-        local topRichestPlayers = MySQL.Sync.fetchAll("SELECT `name`, `money`, `citizenid`, JSON_VALUE(money, '$.cash') + JSON_VALUE(money, '$.bank') AS `total_money` FROM `players` GROUP BY `name` ORDER BY `total_money` DESC")
+        local topRichestPlayers = MySQL.Sync.fetchAll("SELECT `name`, `money`, `citizenid`, JSON_VALUE(money, '$.cash') + JSON_VALUE(money, '$.bank') AS `total_money` FROM `players` GROUP BY `citizenid` ORDER BY `total_money` DESC")
         local shortMsg = ''
 
         for _, v in pairs(topRichestPlayers) do
