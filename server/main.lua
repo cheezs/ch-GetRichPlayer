@@ -101,38 +101,6 @@ RegisterNetEvent("mb-GetRichPlayer:server:getAllPlayerMoney", function(type)
     end
 end)
 
---Event for ALL PLAYER
-RegisterNetEvent("mb-GetRichPlayer:server:getAllPlayerMoney", function(type)
-    if (type == "full") then
-        local topRichestPlayers = MySQL.Sync.fetchAll("SELECT `name`, `money`, `citizenid`, `license`, JSON_VALUE(money, '$.cash') + JSON_VALUE(money, '$.bank') AS `total_money` FROM `players` GROUP BY `citizenid` ORDER BY `total_money` DESC")
-        local resultWithLicense = ''
-
-        for _, v in pairs(topRichestPlayers) do
-            resultWithLicense = resultWithLicense .. "`" .. _ .. "." .. Lang:t("message.top_with_license", {name = topRichestPlayers[_]["name"], citizenid = topRichestPlayers[_]["citizenid"], license = topRichestPlayers[_]["license"], money = topRichestPlayers[_]["money"], totalMoney = topRichestPlayers[_]["total_money"]})
-        end
-
-        sendToDiscord(resultWithLicense) --Send log to discord
-    elseif (type == "standard") then
-        local topRichestPlayers = MySQL.Sync.fetchAll("SELECT `name`, `money`, `citizenid`, JSON_VALUE(money, '$.cash') + JSON_VALUE(money, '$.bank') AS `total_money` FROM `players` GROUP BY `citizenid` ORDER BY `total_money` DESC")
-        local resultWithoutLicense = ''
-
-        for _, v in pairs(topRichestPlayers) do
-            resultWithoutLicense = resultWithoutLicense .. "`" .. _ .. "." .. Lang:t("message.top_without_license", {name = topRichestPlayers[_]["name"], citizenid = topRichestPlayers[_]["citizenid"], money = topRichestPlayers[_]["money"], totalMoney = topRichestPlayers[_]["total_money"]})
-        end
-
-        sendToDiscord(resultWithoutLicense) --Send log to discord
-    else
-        local topRichestPlayers = MySQL.Sync.fetchAll("SELECT `name`, `money`, `citizenid`, JSON_VALUE(money, '$.cash') + JSON_VALUE(money, '$.bank') AS `total_money` FROM `players` GROUP BY `citizenid` ORDER BY `total_money` DESC")
-        local shortMsg = ''
-
-        for _, v in pairs(topRichestPlayers) do
-            shortMsg = shortMsg .. "`" .. _ .. "." .. Lang:t("message.short_top_message", {name = topRichestPlayers[_]["name"], citizenid = topRichestPlayers[_]["citizenid"], totalMoney = topRichestPlayers[_]["total_money"]})
-        end
-
-        sendToDiscord(shortMsg) --Send log to discord
-    end
-end)
-
 --Auto send log to discord
 RegisterNetEvent("mb-GetRichPlayer:server:sendLog", function()
     if (Config.OnlyTopRichest.enable) then
